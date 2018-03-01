@@ -1,5 +1,3 @@
-package p012;
-
 import java.awt.Image;
 import javax.swing.ImageIcon;
 //TODO Transform the code to be used safely in a concurrent context.  
@@ -25,54 +23,54 @@ public class Ball {
 		y = Billiards.Height/2-16;
 		v = 5;
 		fi =  Math.random() * Math.PI * 2;
+		
+		assert y>Board.TOPBOARD; 
+ 		assert y<Board.BOTTOMBOARD;
+		assert x>Board.LEFTBOARD;
+ 		assert x<Board.RIGHTBOARD;
 	}
 
+	/* Norma b�sica 1 para evitar interferencias: Realizar bloqueo durante la actualizaci�n 
+	de los campos de los objetos*/
+	
 	public synchronized void move() {
-		setV(getV()*Math.exp(-getV()/1000));
-		dx = getV()*Math.cos(getFi());
-		dy = getV()*Math.sin(getFi());
+		v = v*Math.exp(-v/1000);
+		dx = v*Math.cos(fi);
+		dy = v*Math.sin(fi);
 		if (Math.abs(dx) < 1 && Math.abs(dy) < 1) {
 			dx = 0;
 			dy = 0;
 		}
-		setX(getX()+dx);   
-		//y += dy;
-		setY(getY()+dy);
+		x += dx;   
+		y += dy;
+		
 		
 		reflect();
 		
 		//TODO Check postcondition
 				
-		assert getY()>Board.TOPBOARD; 
- 		assert getY()<Board.BOTTOMBOARD;
-		assert getX()>Board.LEFTBOARD;
- 		assert getX()<Board.RIGHTBOARD;
+		assert y>Board.TOPBOARD; 
+ 		assert y<Board.BOTTOMBOARD;
+		assert x>Board.LEFTBOARD;
+ 		assert x<Board.RIGHTBOARD;
  		
  		
 	}
 
-	public synchronized void reflect() {
-		if (Math.abs(getX() + IMG_TAM_X - Board.RIGHTBOARD) <  Math.abs(dx)) {
-			setFi(Math.PI - getFi());
+	private void reflect() {
+		if (Math.abs(x + IMG_TAM_X - Board.RIGHTBOARD) <  Math.abs(dx)) {
+			fi = Math.PI - fi;
 		}
-		if (Math.abs(getY() + IMG_TAM_Y - Board.BOTTOMBOARD) <  Math.abs(dy)) {
-			setFi(-getFi());
+		if (Math.abs(y + IMG_TAM_Y - Board.BOTTOMBOARD) <  Math.abs(dy)) {
+			fi = - fi;
 		}
-		if (Math.abs(getX() - Board.LEFTBOARD) <  Math.abs(dx)) {
-			//fi = Math.PI - fi;
-			setFi(Math.PI - getFi());
+		if (Math.abs(x - Board.LEFTBOARD) <  Math.abs(dx)) {
+			fi = Math.PI - fi;
 		}
-		if (Math.abs(getY() - Board.TOPBOARD) <  Math.abs(dy)) {
-			setFi(-getFi());
+		if (Math.abs(y - Board.TOPBOARD) <  Math.abs(dy)) {
+			fi = - fi;
 		}
-		
-		
-			
-		assert getY()>Board.TOPBOARD;
- 		assert getY()<Board.BOTTOMBOARD;
-		assert getX()>Board.LEFTBOARD;
- 		assert getX()<Board.RIGHTBOARD;
-		
+						
 	}
 
 	public synchronized int getX() {
@@ -84,10 +82,10 @@ public class Ball {
 	}
 	
 	public synchronized double getFi() {
-		return (double)fi;
+		return fi;
 	}
 	public synchronized double getV() {
-		return (double)v;
+		return v;
 	}
 
 	public synchronized double getdr() {

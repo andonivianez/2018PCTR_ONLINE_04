@@ -1,5 +1,3 @@
-package p012;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -39,8 +37,6 @@ public class Billiards extends JFrame {
 		board.setForeground(new Color(0, 128, 0));
 		board.setBackground(new Color(0, 128, 0));
 
-		initBalls();
-		board.setBalls(balls);
 
 		b_start = new JButton("Empezar");
 		b_start.addActionListener(new StartListener());
@@ -62,6 +58,10 @@ public class Billiards extends JFrame {
 		setTitle("Práctica programación concurrente objetos móviles independientes");
 		setResizable(false);
 		setVisible(true);
+
+
+		initBalls();
+		board.setBalls(balls);
 	}
 
 	private Thread makeThread(final Ball ball) {
@@ -75,8 +75,6 @@ public class Billiards extends JFrame {
 					try {
 						while (true) {
 							ball.move();
-							//ball.reflect();
-							
 							board.repaint();
 							Thread.sleep(20);
 						}
@@ -96,7 +94,7 @@ public class Billiards extends JFrame {
 		// TODO init balls
 	
 		
-		for (int i=0; i<2; i++) {
+		for (int i=0; i<N_BALL; i++) {
 			balls[i] = new Ball();			
 		}
 	}
