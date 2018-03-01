@@ -1,12 +1,18 @@
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+package p012;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+
+//Prueba de modificacion
+
 
 @SuppressWarnings("serial")
 public class Billiards extends JFrame {
@@ -18,8 +24,14 @@ public class Billiards extends JFrame {
 
 	private Board board;
 
+	// TODO update with number of group label. See practice statement.
 	private final int N_BALL = 2;
+	//Inicializamos el array con el n� de bolas. Posteriormente asignamos un objeto Ball a cada posicion del Array.
 	private Ball[] balls = new Ball[N_BALL];
+	
+	//Creo un array de hilos para las bolas
+	
+	private Thread hilosBall[];
 
 	public Billiards() {
 
@@ -28,6 +40,7 @@ public class Billiards extends JFrame {
 		board.setBackground(new Color(0, 128, 0));
 
 		initBalls();
+		board.setBalls(balls);
 
 		b_start = new JButton("Empezar");
 		b_start.addActionListener(new StartListener());
@@ -51,15 +64,55 @@ public class Billiards extends JFrame {
 		setVisible(true);
 	}
 
+	private Thread makeThread(final Ball ball) {
+			Runnable runloop = new Runnable() {
+		
+					
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					try {
+						while (true) {
+							ball.move();
+							//ball.reflect();
+							
+							board.repaint();
+							Thread.sleep(20);
+						}
+					}
+					catch (InterruptedException e) {
+						return;
+					}
+				}
+					
+
+			};
+				return new Thread(runloop);
+								
+	}
+	
 	private void initBalls() {
 		// TODO init balls
+	
+		
+		for (int i=0; i<2; i++) {
+			balls[i] = new Ball();			
+		}
 	}
 
 	private class StartListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Code is executed when start button is pushed
-
+			if (hilosBall == null) {
+				board.setBalls(balls);
+				hilosBall = new Thread[N_BALL];
+				for (int i=0; i<N_BALL; i++ ) {
+					hilosBall[i] = makeThread(balls[i]);
+					hilosBall[i].start();
+				}
+			}
 		}
 	}
 
@@ -67,6 +120,12 @@ public class Billiards extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Code is executed when stop button is pushed
+			if (hilosBall != null) {
+				for (int i=0; i<N_BALL; i++ ) {
+					hilosBall[i].interrupt();
+				}
+				hilosBall = null;
+			}			
 
 		}
 	}
