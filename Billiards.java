@@ -23,7 +23,11 @@ public class Billiards extends JFrame {
 	private Board board;
 
 	// TODO update with number of group label. See practice statement.
+<<<<<<< HEAD
 	private final int N_BALL = 4+3;
+=======
+	private final int N_BALL = 2;
+>>>>>>> parent of 8fbdd79... Numero de bolas
 	//Inicializamos el array con el n� de bolas. Posteriormente asignamos un objeto Ball a cada posicion del Array.
 	private Ball[] balls = new Ball[N_BALL];
 	
