@@ -22,13 +22,18 @@ public class Board extends JPanel {
 	}
 
 	public void paint(Graphics g) {
+		int x,y;
 		super.paint(g);
 
 		Graphics2D g2d = (Graphics2D) g;
 		if (aBalls != null) {
 			for (int i = 0; i < aBalls.length; i++) {
-				g2d.drawImage(aBalls[i].getImage(), aBalls[i].getX(),
-						aBalls[i].getY(), this);
+				synchronized (this) {
+					x=aBalls[i].getX();
+					y=aBalls[i].getY();
+				}
+				g2d.drawImage(aBalls[i].getImage(), x,
+						y, this);
 			}
 		}
 		g2d.setColor(java.awt.Color.white);
