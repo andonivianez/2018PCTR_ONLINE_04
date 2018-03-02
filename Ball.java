@@ -71,6 +71,10 @@ public class Ball {
 			fi = - fi;
 		}
 						
+		assert y>Board.TOPBOARD; 
+ 		assert y<Board.BOTTOMBOARD;
+		assert x>Board.LEFTBOARD;
+ 		assert x<Board.RIGHTBOARD;
 	}
 
 	public synchronized int getX() {
